@@ -16,15 +16,15 @@ class Command(BaseCommand):
        fake = Faker('pl_PL')
        fake.add_provider(internet)
        fake.add_provider(misc)
-
        for _ in range(DEFAULT_USER_NUM):
            user = User.objects.create_user(username=fake.name(),
                                            email=fake.email(),
                                            password=fake.password())
            for _ in range(DEFAULT_TWEET_PER_USER):
-               tweet = models.Tweet(author=user,
+                tweet = models.Tweet(author=user,
                                     content=fake.text(
                                         max_nb_chars=
                                         models.TWITTER_MAXIMUM_TWEET_LENGTH))
-               tweet.save()
+                tweet.save()
+                self.stdout.write(self.style.SUCCESS("Successfully generated tweet"))
 
