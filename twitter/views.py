@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse_lazy
 from django.views import generic, View
 
+from twitter import forms
 from twitter.forms import UserRegisterForm
 from twitter.models import Tweet
 
@@ -35,5 +37,14 @@ class RegisterView(View):
 
         return render(request, self.template_name, {'form': form})
 
+
+class AddTweetView(generic.CreateView):
+    model = Tweet
+    form_class = forms.TweetFrom
+    success_url = reverse_lazy('twitter:index')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
