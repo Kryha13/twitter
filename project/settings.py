@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'twitter',
     'crispy_forms',
+    'avatar',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+AVATAR_THUMB_FORMAT = 'PNG'

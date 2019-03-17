@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -33,6 +35,7 @@ class RegisterView(View):
             password = form.cleaned_data['password1']
             user.set_password(password)
             user.save()
+            login(request, user)
             return redirect('/')
 
         return render(request, self.template_name, {'form': form})
@@ -47,4 +50,20 @@ class AddTweetView(generic.CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+
+class ProfileView(View, LoginRequiredMixin):
+    template_name = 'twitter/user_profile.html'
+
+    def get(self, request):
+        user = request.user
+        tweets = Tweet.objects.filter(author=user).order_by('-creation_date')
+        return render(request, self.template_name, {'tweets': tweets})
+
+
+class TweetDetailsView(View):
+    template_name = 'twitter/tweet_details.html'
+
+    def get(self, request, tweet_id):
+        tweet = Tweet.objects.get(id=tweet_id)
+        return render(request, self.template_name, {'tweet': tweet})
 
