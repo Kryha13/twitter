@@ -1,1 +1,2 @@
 # twitter
+Django twitter clone 
